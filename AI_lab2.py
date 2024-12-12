@@ -21,7 +21,7 @@ class ImageMatcherApp(QMainWindow):
 
         # Video feed label
         self.video_label = QLabel("Camera feed")
-        self.video_label.setFixedSize(640, 480)
+        self.video_label.setFixedSize(960, 720)
 
         # Buttons to load template image, start, and stop the camera
         self.load_button = QPushButton("Load Template Image")
@@ -78,8 +78,8 @@ class ImageMatcherApp(QMainWindow):
                 print("Template image loaded successfully.")
                 # Resize template image if larger than 500 pixels in any dimension
                 height, width = self.template_image.shape[:2]
-                if max(height, width) > 500:
-                    scaling_factor = 500 / max(height, width)
+                if max(height, width) > 450:
+                    scaling_factor = 450 / max(height, width)
                     self.template_image = cv2.resize(self.template_image, (int(width * scaling_factor), int(height * scaling_factor)))
             else:
                 print("Failed to load template image.")
@@ -132,9 +132,9 @@ class ImageMatcherApp(QMainWindow):
 
                     if self.connect_markers:
                         # Draw matches between the template and camera feed
-                        scale_factor = 0.5
+                        scale_factor = 1
                         template_resized = cv2.resize(self.template_image, (0, 0), fx=scale_factor, fy=scale_factor)
-                        result_image = cv2.drawMatches(template_resized, kp1, frame, kp2, matches[:10], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+                        result_image = cv2.drawMatches(template_resized, kp1, frame, kp2, matches[:20], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
 
                         # Convert to QImage for display
                         result_image_rgb = cv2.cvtColor(result_image, cv2.COLOR_BGR2RGB)
